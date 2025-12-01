@@ -1,0 +1,31 @@
+{
+  "name": "saas-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NestJS backend with GraphQL and Cassandra",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/graphql": "^12.0.0",
+    "@nestjs/apollo": "^12.0.0",
+    "graphql": "^16.8.1",
+    "apollo-server-express": "^3.12.0",
+    "cassandra-driver": "^4.6.4",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0"
+  }
+}
