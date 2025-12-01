@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "docs:graphql": "spectaql -c spectaql.config.yml"
+    "docs:graphql": "spectaql -c spectaql.config.yml",
+    "docs:preview": "powershell -NoProfile -Command \"$p = if ($env:DOCS_PORT) { [int]$env:DOCS_PORT } else { 3333 }; npx --yes serve -s docs/graphql -l $p\""
   },
   "dependencies": {
     "@nestjs/apollo": "^12.0.0",

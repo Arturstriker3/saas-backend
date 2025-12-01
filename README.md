@@ -32,7 +32,9 @@
 - Build: `npm run build`
 - Start (dev): `npm run start:dev`
 - Start (prod): `npm run start`
-- Gerar docs GraphQL: `npm run docs:graphql` (salva em `docs/graphql` e o app serve em `http://localhost:3000/graphql-docs`)
+- Gerar docs GraphQL: `npm run docs:graphql` (salva em `docs/graphql`)
+- Preview docs local: `npm run docs:preview` (usa `DOCS_PORT`, default `3333`)
+- App serve docs em: `http://localhost:${PORT}${DOCS_ROUTE}` (defaults: `PORT=3000`, `DOCS_ROUTE=/graphql-docs`)
 
 ### Sample Operations
 
@@ -55,3 +57,4 @@ mutation {
 ## Notes
 
 - Repository uses in-memory storage initially. Cassandra client is wired for future persistence.
+- Variáveis `.env`: `PORT`, `DOCS_ROUTE`, `DOCS_PORT`, `CASSANDRA_*`

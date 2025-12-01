@@ -4,10 +4,8 @@ import { AppModule } from "./app.module";
 import { express as voyagerMiddleware } from "graphql-voyager/middleware";
 import express from "express";
 import { join } from "path";
-import {
-  CASSANDRA_CLIENT,
-  CassandraClient,
-} from "./common/database/cassandra.client";
+import { CASSANDRA_CLIENT, CassandraClient } from "./common/database/cassandra.client";
+import { loadEnv } from "./common/config/env";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,7 +17,8 @@ async function bootstrap() {
     process.exit(1);
   }
   app.use("/voyager", voyagerMiddleware({ endpointUrl: "/graphql" }));
-  app.use("/graphql-docs", express.static(join(process.cwd(), "docs/graphql")));
-  await app.listen(process.env.PORT ? parseInt(process.env.PORT, 10) : 3000);
+  const env = loadEnv();
+  app.use(env.DOCS_ROUTE, express.static(join(process.cwd(), "docs/graphql")));
+  await app.listen(parseInt(env.PORT, 10));
 }
 bootstrap();
