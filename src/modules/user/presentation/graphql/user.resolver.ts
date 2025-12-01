@@ -60,13 +60,13 @@ export class UserResolver {
   private toGraphQL(entity: UserEntity): User {
     return {
       id: entity.id,
-      tenantId: entity.tenantId,
       name: entity.name,
       email: entity.email,
       birthDate: entity.birthDate,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       isActive: entity.isActive,
+      role: entity.role,
     };
   }
 }

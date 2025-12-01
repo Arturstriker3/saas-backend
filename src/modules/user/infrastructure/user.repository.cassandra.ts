@@ -16,21 +16,21 @@ export class UserRepositoryCassandra implements UserRepository {
   }
 
   async create(props: {
-    tenantId: string;
     name: string;
     email: string;
     passwordHash: string;
     birthDate: Date;
+    role: string;
   }): Promise<UserEntity> {
     const id = uuidv7();
     const now = new Date();
     const entity = new UserEntity({
       id,
-      tenantId: props.tenantId,
       name: props.name,
       email: props.email,
       passwordHash: props.passwordHash,
       birthDate: props.birthDate,
+      role: props.role,
       createdAt: now,
       updatedAt: now,
       isActive: false,
@@ -49,5 +49,13 @@ export class UserRepositoryCassandra implements UserRepository {
 
   async save(user: UserEntity): Promise<void> {
     this.memory.set(user.id, user);
+  }
+
+  async findByEmail(email: string): Promise<UserEntity | null> {
+    const lower = email.toLowerCase();
+    for (const u of this.memory.values()) {
+      if (u.email === lower) return u;
+    }
+    return null;
   }
 }

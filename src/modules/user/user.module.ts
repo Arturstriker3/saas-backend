@@ -47,5 +47,6 @@ import { UserResolver } from "./presentation/graphql/user.resolver";
     },
     UserResolver,
   ],
+  exports: [USER_REPOSITORY],
 })
 export class UserModule {}

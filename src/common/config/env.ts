@@ -13,6 +13,9 @@ const EnvSchema = z.object({
   CASSANDRA_PORT: z.string().default("9042"),
   CASSANDRA_LOCAL_DATACENTER: z.string().default("datacenter1"),
   CASSANDRA_KEYSPACE: z.string().default("app_keyspace"),
+  JWT_SECRET: z.string().default("changeme"),
+  JWT_EXPIRES_IN: z.string().default("900s"),
+  REFRESH_TOKEN_TTL: z.string().default("1209600"),
 });
 
 export type AppEnv = z.infer<typeof EnvSchema>;

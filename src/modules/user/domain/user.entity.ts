@@ -1,11 +1,14 @@
-import { USER_NAME_MIN_LENGTH, USER_PASSWORD_HASH_MIN_LENGTH } from './user.constants';
+import {
+  USER_NAME_MIN_LENGTH,
+  USER_PASSWORD_HASH_MIN_LENGTH,
+} from "./user.constants";
 
 export class UserEntity {
   private static readonly NAME_MIN_LENGTH = USER_NAME_MIN_LENGTH;
-  private static readonly PASSWORD_HASH_MIN_LENGTH = USER_PASSWORD_HASH_MIN_LENGTH;
+  private static readonly PASSWORD_HASH_MIN_LENGTH =
+    USER_PASSWORD_HASH_MIN_LENGTH;
 
   public readonly id: string;
-  public readonly tenantId: string;
   public readonly createdAt: Date;
   public readonly birthDate: Date;
 
@@ -14,20 +17,20 @@ export class UserEntity {
   private _passwordHash: string;
   private _isActive: boolean;
   private _updatedAt: Date;
+  private _role: string;
 
   constructor(props: {
     id: string;
-    tenantId: string;
     name: string;
     email: string;
     passwordHash: string;
     birthDate: Date;
+    role: string;
     createdAt?: Date;
     updatedAt?: Date;
     isActive?: boolean;
   }) {
     if (!props.id) throw new Error("User ID is required");
-    if (!props.tenantId) throw new Error("Tenant ID is required");
     if (!props.email.includes("@")) throw new Error("Invalid email");
     if (!props.name || props.name.length < UserEntity.NAME_MIN_LENGTH)
       throw new Error(
@@ -40,11 +43,11 @@ export class UserEntity {
       throw new Error("Invalid password hash");
 
     this.id = props.id;
-    this.tenantId = props.tenantId;
     this._name = props.name;
     this._email = props.email.toLowerCase();
     this._passwordHash = props.passwordHash;
     this.birthDate = props.birthDate;
+    this._role = props.role;
     this.createdAt = props.createdAt ?? new Date();
     this._updatedAt = props.updatedAt ?? new Date();
     this._isActive = props.isActive ?? false;
@@ -100,5 +103,9 @@ export class UserEntity {
 
   get updatedAt() {
     return this._updatedAt;
+  }
+
+  get role() {
+    return this._role;
   }
 }
