@@ -8,6 +8,7 @@ const EnvSchema = z.object({
   PORT: z.string().default("3000"),
   DOCS_ROUTE: z.string().default("/graphql-docs"),
   DOCS_PORT: z.string().default("3333"),
+  SKIP_DB_CONNECT: z.string().default("false"),
   CASSANDRA_CONTACT_POINTS: z.string().default("localhost"),
   CASSANDRA_PORT: z.string().default("9042"),
   CASSANDRA_LOCAL_DATACENTER: z.string().default("datacenter1"),

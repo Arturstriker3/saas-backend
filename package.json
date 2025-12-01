@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "NestJS backend with GraphQL and Cassandra",
+  "engines": {
+    "node": ">=22 <23"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/main.js",
@@ -28,6 +31,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "tslib": "^2.8.1",
+    "uuid": "11",
     "zod": "^3.23.8"
   },
   "devDependencies": {
