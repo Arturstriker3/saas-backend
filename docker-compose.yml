@@ -16,15 +16,16 @@ services:
       interval: 30s
       timeout: 10s
       retries: 10
-  studio:
+  cassandra-web:
     platform: linux/amd64
-    image: datastax/dse-studio
-    container_name: datastax-studio
-    user: "0"
+    image: ipushc/cassandra-web
+    container_name: cassandra-web
     environment:
-      - DS_LICENSE=accept
+      - CASSANDRA_HOST=cassandra
+      - CASSANDRA_PORT=9042
+      - HOST_PORT=:80
     ports:
-      - "9091:9091"
+      - "3001:80"
     depends_on:
       - cassandra
 volumes:
