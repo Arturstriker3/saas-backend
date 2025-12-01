@@ -1,9 +1,8 @@
 import { InputType, Field } from "@nestjs/graphql";
-import { Role } from "../../../role/domain/role.types";
+import { Role, RoleEnum } from "../../../role/domain/role.types";
 
 @InputType()
 export class CreateUserInput {
-
   @Field()
   name!: string;
 
@@ -16,7 +15,7 @@ export class CreateUserInput {
   @Field()
   birthDate!: Date;
 
-  @Field()
+  @Field(() => RoleEnum)
   role!: Role;
 }
 

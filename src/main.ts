@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
+import { Logger } from "@nestjs/common";
 import { express as voyagerMiddleware } from "graphql-voyager/middleware";
 import express from "express";
 import { join } from "path";
@@ -39,5 +40,10 @@ async function bootstrap() {
     await runSeed();
   }
   await app.listen(parseInt(env.PORT, 10));
+  const base = `http://localhost:${parseInt(env.PORT, 10)}`;
+  Logger.log(`API listening on ${base}`, "Bootstrap");
+  Logger.log(`GraphQL Playground: ${base}/graphql`, "Bootstrap");
+  Logger.log(`GraphQL Voyager: ${base}/voyager`, "Bootstrap");
+  Logger.log(`Docs: ${base}${env.DOCS_ROUTE}`, "Bootstrap");
 }
 bootstrap();
