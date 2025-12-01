@@ -1,22 +1,10 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
-import { ObjectType, Field } from "@nestjs/graphql";
 import { Inject } from "@nestjs/common";
 import { CreateExampleUseCase } from "../../application/use-cases/create-example.use-case";
 import { ListExampleUseCase } from "../../application/use-cases/list-example.use-case";
 import { CreateExampleInput } from "./example.inputs";
 import { ExampleEntity } from "../../domain/example.entity";
-
-@ObjectType()
-class Example {
-  @Field()
-  id!: string;
-
-  @Field()
-  name!: string;
-
-  @Field()
-  createdAt!: Date;
-}
+import { Example } from "./example.types";
 
 @Resolver(() => Example)
 export class ExampleResolver {
