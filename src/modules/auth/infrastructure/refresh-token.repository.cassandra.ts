@@ -17,7 +17,7 @@ export class RefreshTokenRepositoryCassandra implements RefreshTokenRepository {
 
   async save(record: RefreshTokenRecord): Promise<void> {
     const query =
-      "INSERT INTO refresh_tokens (token, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)";
+      "INSERT INTO refresh_tokens (token_value, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)";
     const params = [
       record.token,
       record.userId,
@@ -29,12 +29,12 @@ export class RefreshTokenRepositoryCassandra implements RefreshTokenRepository {
 
   async findByToken(token: string): Promise<RefreshTokenRecord | null> {
     const query =
-      "SELECT token, user_id, created_at, expires_at FROM refresh_tokens WHERE token = ?";
+      "SELECT token_value, user_id, created_at, expires_at FROM refresh_tokens WHERE token_value = ?";
     const result = await this.client.execute(query, [token], { prepare: true });
     const row = result.first();
     if (!row) return null;
     return {
-      token: row.get("token"),
+      token: row.get("token_value"),
       userId: row.get("user_id"),
       createdAt: row.get("created_at"),
       expiresAt: row.get("expires_at"),
@@ -42,7 +42,7 @@ export class RefreshTokenRepositoryCassandra implements RefreshTokenRepository {
   }
 
   async deleteByToken(token: string): Promise<void> {
-    const query = "DELETE FROM refresh_tokens WHERE token = ?";
+    const query = "DELETE FROM refresh_tokens WHERE token_value = ?";
     await this.client.execute(query, [token], { prepare: true });
   }
 }

@@ -16,6 +16,11 @@ const EnvSchema = z.object({
   JWT_SECRET: z.string().default("changeme"),
   JWT_EXPIRES_IN: z.string().default("900s"),
   REFRESH_TOKEN_TTL: z.string().default("1209600"),
+  RUN_MIGRATIONS_ON_STARTUP: z.string().default("false"),
+  RUN_SEED_ON_STARTUP: z.string().default("false"),
+  SUPER_ADMIN_EMAIL: z.string().default("admin@example.com"),
+  SUPER_ADMIN_NAME: z.string().default("Super Admin"),
+  SUPER_ADMIN_PASSWORD: z.string().default("admin123"),
 });
 
 export type AppEnv = z.infer<typeof EnvSchema>;

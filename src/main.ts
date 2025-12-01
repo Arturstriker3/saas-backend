@@ -9,11 +9,19 @@ import {
   CassandraClient,
 } from "./common/database/cassandra.client";
 import { loadEnv } from "./common/config/env";
+import { runMigrations } from "./common/database/migration-runner";
+import { runSeed } from "./common/database/seed/seed";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use("/voyager", voyagerMiddleware({ endpointUrl: "/graphql" }));
   const env = loadEnv();
+  if (env.RUN_MIGRATIONS_ON_STARTUP === "true") {
+    await runMigrations();
+  }
+  if (env.RUN_SEED_ON_STARTUP === "true") {
+    await runSeed();
+  }
   if (env.SKIP_DB_CONNECT !== "true") {
     const cassandra = app.get<CassandraClient>(CASSANDRA_CLIENT);
     try {
@@ -24,6 +32,12 @@ async function bootstrap() {
     }
   }
   app.use(env.DOCS_ROUTE, express.static(join(process.cwd(), "docs/graphql")));
+  if (env.RUN_MIGRATIONS_ON_STARTUP === "true") {
+    await runMigrations();
+  }
+  if (env.RUN_SEED_ON_STARTUP === "true") {
+    await runSeed();
+  }
   await app.listen(parseInt(env.PORT, 10));
 }
 bootstrap();

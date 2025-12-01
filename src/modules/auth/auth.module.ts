@@ -29,7 +29,7 @@ class RefreshTokensTableInit implements OnModuleInit {
     if (env.SKIP_DB_CONNECT === "true") return;
     const ddl =
       "CREATE TABLE IF NOT EXISTS refresh_tokens (" +
-      " token text PRIMARY KEY," +
+      " token_value text PRIMARY KEY," +
       " user_id uuid," +
       " created_at timestamp," +
       " expires_at timestamp" +
