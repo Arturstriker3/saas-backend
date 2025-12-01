@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "NestJS backend with GraphQL and Cassandra",
+  "engines": {
+    "node": ">=22 <23"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/main.js",
@@ -10,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "docs:graphql": "spectaql -c spectaql.config.yml"
+    "docs:graphql": "spectaql -c spectaql.config.yml",
+    "docs:preview": "powershell -NoProfile -Command \"$p = if ($env:DOCS_PORT) { [int]$env:DOCS_PORT } else { 3333 }; npx --yes serve -s docs/graphql -l $p\""
   },
   "dependencies": {
     "@nestjs/apollo": "^12.0.0",
@@ -27,6 +31,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "tslib": "^2.8.1",
+    "uuid": "11",
     "zod": "^3.23.8"
   },
   "devDependencies": {

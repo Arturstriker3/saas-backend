@@ -3,8 +3,10 @@ const tsParser = require("@typescript-eslint/parser");
 
 module.exports = [
   {
-    files: ["**/*.ts"],
     ignores: ["dist/**", "node_modules/**", "schema.gql"],
+  },
+  {
+    files: ["**/*.ts"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -24,6 +26,17 @@ module.exports = [
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-explicit-any": "warn",
       "no-console": "off",
+      "max-len": [
+        "warn",
+        {
+          code: 140,
+          tabWidth: 2,
+          ignoreUrls: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+          ignoreComments: true,
+        },
+      ],
     },
   },
 ];
