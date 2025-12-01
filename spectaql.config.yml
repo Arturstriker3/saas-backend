@@ -1,0 +1,7 @@
+info:
+  title: Backend GraphQL API
+  x-url: http://localhost:3000/graphql
+spectaql:
+  targetDir: ./docs/graphql
+introspection:
+  schemaFile: ./schema.gql
