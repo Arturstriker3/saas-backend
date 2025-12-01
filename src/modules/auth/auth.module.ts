@@ -19,6 +19,12 @@ import { LogoutUseCase } from "./application/use-cases/logout.use-case";
 import { AuthResolver } from "./presentation/graphql/auth.resolver";
 import { JwtStrategy } from "./presentation/jwt.strategy";
 import { GqlAuthGuard } from "./presentation/jwt.guard";
+import { PasswordResetRepository } from "./domain/password-reset.repository";
+import { PasswordResetRepositoryCassandra } from "./infrastructure/password-reset.repository.cassandra";
+import { RequestPasswordResetUseCase } from "./application/use-cases/request-password-reset.use-case";
+import { ConfirmPasswordResetUseCase } from "./application/use-cases/confirm-password-reset.use-case";
+import { resendClientProvider } from "../../common/email/resend.client";
+import { EmailService } from "../../common/email/email.service";
 
 class RefreshTokensTableInit implements OnModuleInit {
   constructor(
@@ -29,6 +35,24 @@ class RefreshTokensTableInit implements OnModuleInit {
     if (env.SKIP_DB_CONNECT === "true") return;
     const ddl =
       "CREATE TABLE IF NOT EXISTS refresh_tokens (" +
+      " token_value text PRIMARY KEY," +
+      " user_id uuid," +
+      " created_at timestamp," +
+      " expires_at timestamp" +
+      ")";
+    await this.client.execute(ddl);
+  }
+}
+
+class PasswordResetsTableInit implements OnModuleInit {
+  constructor(
+    @Inject(CASSANDRA_CLIENT) private readonly client: CassandraClient
+  ) {}
+  async onModuleInit() {
+    const env = loadEnv();
+    if (env.SKIP_DB_CONNECT === "true") return;
+    const ddl =
+      "CREATE TABLE IF NOT EXISTS password_resets (" +
       " token_value text PRIMARY KEY," +
       " user_id uuid," +
       " created_at timestamp," +
@@ -51,10 +75,16 @@ class RefreshTokensTableInit implements OnModuleInit {
   ],
   providers: [
     cassandraClientProvider,
+    resendClientProvider,
     {
       provide: RefreshTokenRepositoryCassandra,
       useClass: RefreshTokenRepositoryCassandra,
     },
+    {
+      provide: PasswordResetRepositoryCassandra,
+      useClass: PasswordResetRepositoryCassandra,
+    },
+    EmailService,
     BcryptPasswordHasher,
     {
       provide: AuthenticateUserUseCase,
@@ -85,10 +115,33 @@ class RefreshTokensTableInit implements OnModuleInit {
       useFactory: (tokens: RefreshTokenRepository) => new LogoutUseCase(tokens),
       inject: [RefreshTokenRepositoryCassandra],
     },
+    {
+      provide: RequestPasswordResetUseCase,
+      useFactory: (
+        users: UserRepository,
+        resets: PasswordResetRepository,
+        email: EmailService
+      ) => new RequestPasswordResetUseCase(users, resets, email),
+      inject: [USER_REPOSITORY, PasswordResetRepositoryCassandra, EmailService],
+    },
+    {
+      provide: ConfirmPasswordResetUseCase,
+      useFactory: (
+        resets: PasswordResetRepository,
+        users: UserRepository,
+        hasher: BcryptPasswordHasher
+      ) => new ConfirmPasswordResetUseCase(resets, users, hasher),
+      inject: [
+        PasswordResetRepositoryCassandra,
+        USER_REPOSITORY,
+        BcryptPasswordHasher,
+      ],
+    },
     AuthResolver,
     JwtStrategy,
     GqlAuthGuard,
     RefreshTokensTableInit,
+    PasswordResetsTableInit,
   ],
   exports: [GqlAuthGuard, JwtStrategy],
 })

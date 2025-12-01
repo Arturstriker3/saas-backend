@@ -62,51 +62,6 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
 );
 ```
 
-## Guards & RBAC
-
-- `JwtStrategy`: extracts `Bearer` token and populates `request.user = { userId, role }`.
-- `GqlAuthGuard`: GraphQL-aware auth guard (`AuthGuard('jwt')`).
-- `@Roles(...roles)` decorator and `RolesGuard` enforce RBAC using `request.user.role`.
-
-Example usage in a resolver:
-
-```ts
-@UseGuards(GqlAuthGuard, RolesGuard)
-@Roles('ADMIN')
-@Mutation(() => SomeType)
-async secureAction() { /* ... */ }
-```
-
-## Service Auth Mapping
-
-- Auth
-  - `login(input: { email, password }) -> AuthPayload`
-    - Access: Public
-  - `refreshToken(input: { refreshToken }) -> AuthPayload`
-    - Access: Public (requires valid refresh token)
-  - `logout(input: { refreshToken }) -> Boolean`
-    - Access: Public (requires valid refresh token)
-
-- User
-  - `users(): [User]`
-    - Recommended: `@UseGuards(GqlAuthGuard)`
-    - Current enforcement: Not applied
-  - `createUser(input: CreateUserInput): User`
-    - Recommended: `@UseGuards(GqlAuthGuard, RolesGuard) @Roles('ADMIN')`
-    - Current enforcement: Not applied
-  - `activateUser(input: { id }): User`
-    - Recommended: `@UseGuards(GqlAuthGuard, RolesGuard) @Roles('ADMIN')`
-    - Current enforcement: Not applied
-  - `deactivateUser(input: { id }): User`
-    - Recommended: `@UseGuards(GqlAuthGuard, RolesGuard) @Roles('ADMIN')`
-    - Current enforcement: Not applied
-  - `changeUserName(input: { id, name }): User`
-    - Recommended: `@UseGuards(GqlAuthGuard)` and enforce self-only update
-    - Current enforcement: Not applied
-  - `changeUserPassword(input: { id, newPasswordHash }): User`
-    - Recommended: `@UseGuards(GqlAuthGuard)` and enforce self-only update
-    - Current enforcement: Not applied
-
 ## Token Rotation
 
 - `refreshToken` mutation rotates the refresh token:
