@@ -16,6 +16,7 @@ export const cassandraClientProvider: Provider = {
       localDataCenter: env.CASSANDRA_LOCAL_DATACENTER,
       protocolOptions: { port: parseInt(env.CASSANDRA_PORT, 10) },
       keyspace: env.CASSANDRA_KEYSPACE,
+      socketOptions: { connectTimeout: 5000 },
     });
     return client;
   },

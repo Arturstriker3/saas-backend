@@ -3,8 +3,10 @@ const tsParser = require("@typescript-eslint/parser");
 
 module.exports = [
   {
-    files: ["**/*.ts"],
     ignores: ["dist/**", "node_modules/**", "schema.gql"],
+  },
+  {
+    files: ["**/*.ts"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
