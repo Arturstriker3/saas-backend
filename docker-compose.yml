@@ -1,10 +1,10 @@
-version: '3.8'
+version: "3.8"
 services:
   cassandra:
     image: cassandra:4.1
     container_name: cassandra
     ports:
-      - '9042:9042'
+      - "9042:9042"
     environment:
       - CASSANDRA_CLUSTER_NAME=saas-cluster
       - CASSANDRA_DC=datacenter1
@@ -12,9 +12,20 @@ services:
     volumes:
       - cassandra_data:/var/lib/cassandra
     healthcheck:
-      test: ['CMD', 'cqlsh', '-e', 'DESCRIBE CLUSTER']
+      test: ["CMD", "cqlsh", "-e", "DESCRIBE CLUSTER"]
       interval: 30s
       timeout: 10s
       retries: 10
+  studio:
+    platform: linux/amd64
+    image: datastax/dse-studio
+    container_name: datastax-studio
+    user: "0"
+    environment:
+      - DS_LICENSE=accept
+    ports:
+      - "9091:9091"
+    depends_on:
+      - cassandra
 volumes:
   cassandra_data:
