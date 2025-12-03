@@ -14,3 +14,17 @@ export class RefreshTokenInput {
   @Field()
   refreshToken!: string;
 }
+
+@InputType()
+export class RequestPasswordResetInput {
+  @Field()
+  email!: string;
+}
+
+@InputType()
+export class ConfirmPasswordResetInput {
+  @Field()
+  token!: string;
+  @Field()
+  newPassword!: string;
+}

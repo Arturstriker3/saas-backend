@@ -1,12 +1,19 @@
 import { Resolver, Mutation, Args } from "@nestjs/graphql";
 import { Inject } from "@nestjs/common";
-import { LoginInput, RefreshTokenInput } from "./auth.inputs";
+import {
+  LoginInput,
+  RefreshTokenInput,
+  RequestPasswordResetInput,
+  ConfirmPasswordResetInput,
+} from "./auth.inputs";
 import { AuthPayload } from "./auth.types";
 import { AuthenticateUserUseCase } from "../../application/use-cases/authenticate-user.use-case";
 import { RefreshTokenUseCase } from "../../application/use-cases/refresh-token.use-case";
 import { LogoutUseCase } from "../../application/use-cases/logout.use-case";
 import { User } from "../../../user/presentation/graphql/user.types";
 import { UserEntity } from "../../../user/domain/user.entity";
+import { RequestPasswordResetUseCase } from "../../application/use-cases/request-password-reset.use-case";
+import { ConfirmPasswordResetUseCase } from "../../application/use-cases/confirm-password-reset.use-case";
 
 @Resolver()
 export class AuthResolver {
@@ -15,7 +22,11 @@ export class AuthResolver {
     private readonly authUseCase: AuthenticateUserUseCase,
     @Inject(RefreshTokenUseCase)
     private readonly refreshUseCase: RefreshTokenUseCase,
-    @Inject(LogoutUseCase) private readonly logoutUseCase: LogoutUseCase
+    @Inject(LogoutUseCase) private readonly logoutUseCase: LogoutUseCase,
+    @Inject(RequestPasswordResetUseCase)
+    private readonly requestResetUseCase: RequestPasswordResetUseCase,
+    @Inject(ConfirmPasswordResetUseCase)
+    private readonly confirmResetUseCase: ConfirmPasswordResetUseCase
   ) {}
 
   @Mutation(() => AuthPayload)
@@ -37,6 +48,21 @@ export class AuthResolver {
   @Mutation(() => Boolean)
   async logout(@Args("input") input: RefreshTokenInput): Promise<boolean> {
     return this.logoutUseCase.execute(input);
+  }
+
+  @Mutation(() => Boolean)
+  async requestPasswordReset(
+    @Args("input") input: RequestPasswordResetInput
+  ): Promise<boolean> {
+    return this.requestResetUseCase.execute(input);
+  }
+
+  @Mutation(() => User)
+  async confirmPasswordReset(
+    @Args("input") input: ConfirmPasswordResetInput
+  ): Promise<User> {
+    const user = await this.confirmResetUseCase.execute(input);
+    return this.toGraphQL(user);
   }
 
   private toGraphQL(user: UserEntity): User {

@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
 );
 ```
 
+
 ## Token Rotation
 
 - `refreshToken` mutation rotates the refresh token:
